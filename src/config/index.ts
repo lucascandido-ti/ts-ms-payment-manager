@@ -13,6 +13,9 @@ import defaultSettingsJson from './settings.json';
 
 export * from './api.config';
 
+export * from './utils';
+export * from './providers';
+
 export class Config {
   @IsInstance(ApiConfig)
   @ValidateNested()

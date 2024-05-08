@@ -13,6 +13,15 @@ services:
       - NATS_CLUSTER_NAME=NATS
       - NATS_CLUSTER=nats://0.0.0.0:6222
 
+  mongodb:
+    container_name: ts-ms-payment-mongodb
+    image: mongo
+    ports:
+      - 27017:27017
+    environment:
+      MONGO_INITDB_ROOT_USERNAME: root
+      MONGO_INITDB_ROOT_PASSWORD: root
+
 networks:
   nats:
     driver: bridge
