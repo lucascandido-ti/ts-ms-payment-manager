@@ -11,6 +11,8 @@ import { getConfigModuleOptions } from './utils';
 
 import defaultSettingsJson from './settings.json';
 
+export * from './api.config';
+
 export class Config {
   @IsInstance(ApiConfig)
   @ValidateNested()
