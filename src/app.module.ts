@@ -1,10 +1,17 @@
 import { Module } from '@nestjs/common';
-import { AppController } from './app.controller';
-import { AppService } from './app.service';
+import { ClientsModule } from '@nestjs/microservices';
+import { CacheModule } from '@nestjs/cache-manager';
+import { cacheModuleOptions, natsModuleOptions } from './config/api.config';
+import { configModuleOptions } from './config';
+import { ConfigModule } from '@nestjs/config';
 
 @Module({
-  imports: [],
-  controllers: [AppController],
-  providers: [AppService],
+  imports: [
+    CacheModule.register(cacheModuleOptions),
+    ConfigModule.forRoot(configModuleOptions),
+    ClientsModule.registerAsync([natsModuleOptions]),
+  ],
+  controllers: [],
+  providers: [],
 })
 export class AppModule {}
