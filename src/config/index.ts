@@ -15,6 +15,7 @@ export * from './api.config';
 
 export * from './utils';
 export * from './providers';
+export * from './dependecy-injection';
 
 export class Config {
   @IsInstance(ApiConfig)
