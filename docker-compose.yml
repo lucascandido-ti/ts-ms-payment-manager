@@ -14,14 +14,18 @@ services:
       - NATS_CLUSTER=nats://0.0.0.0:6222
 
   mongodb:
-    container_name: ts-ms-payment-mongodb
-    image: mongo
-    ports:
-      - 27017:27017
+    build:
+      context: ./docker/mongo
+      args:
+        MONGO_VERSION: 4
     environment:
       MONGO_INITDB_ROOT_USERNAME: root
       MONGO_INITDB_ROOT_PASSWORD: root
-
+      MONGO_INITDB_DATABASE: paymentmanager
+      MONGO_REPLICA_HOST: localhost
+      MONGO_REPLICA_PORT: 27017
+      MONGO_COMMAND: mongo
+    ports:
+      - '27017:27017'
 networks:
   nats:
-    driver: bridge
