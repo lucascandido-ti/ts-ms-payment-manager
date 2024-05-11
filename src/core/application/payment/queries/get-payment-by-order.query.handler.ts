@@ -17,7 +17,7 @@ export class GetPaymentByOrderQueryHandler
 
   async execute(query: GetPaymentByOrderQuery) {
     const { orderId } = query;
-    const order = await this._paymentRepository.GetByOrder(+orderId);
+    const order = await this._paymentRepository.GetByOrder(orderId);
 
     return order;
   }

@@ -9,7 +9,7 @@ export class PaymentController {
 
   @Get('order/:orderId')
   @HttpCode(HttpStatus.OK)
-  async GetByOrder(@Param('orderId') orderId: number): Promise<IPayment> {
+  async GetByOrder(@Param('orderId') orderId: string): Promise<IPayment> {
     return this.commandBus.execute(new GetPaymentByOrderQuery(orderId));
   }
 }

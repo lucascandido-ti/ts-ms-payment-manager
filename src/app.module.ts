@@ -4,13 +4,12 @@ import { CacheModule } from '@nestjs/cache-manager';
 import { ClientsModule } from '@nestjs/microservices';
 
 import {
-  databaseProviders,
   configModuleOptions,
   cacheModuleOptions,
   natsModuleOptions,
-} from './config';
+} from '@/config';
 
-import { PaymentModule } from './modules';
+import { PaymentModule } from '@/modules';
 
 @Module({
   imports: [
@@ -19,6 +18,5 @@ import { PaymentModule } from './modules';
     ClientsModule.registerAsync([natsModuleOptions]),
     PaymentModule,
   ],
-  providers: [...databaseProviders],
 })
 export class AppModule {}

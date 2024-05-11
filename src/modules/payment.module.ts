@@ -1,13 +1,14 @@
 import { CqrsModule } from '@nestjs/cqrs';
 import { Module, Provider } from '@nestjs/common';
 
-import { PAYMENT_REPOSITORY } from '@/config';
+import { PAYMENT_REPOSITORY, PrismaService } from '@/config';
 import { PaymentRepository } from '@/adapters/data';
 import { PaymentController } from '@/consumers/controllers';
 import { GetPaymentByOrderQueryHandler } from '@/core/application/payment/queries';
 
 const httpControllers = [PaymentController];
 const handlers: Provider[] = [GetPaymentByOrderQueryHandler];
+const services: Provider[] = [PrismaService];
 const repositories: Provider[] = [
   { provide: PAYMENT_REPOSITORY, useClass: PaymentRepository },
 ];
@@ -15,6 +16,6 @@ const repositories: Provider[] = [
 @Module({
   imports: [CqrsModule],
   controllers: [...httpControllers],
-  providers: [...handlers, ...repositories],
+  providers: [...handlers, ...repositories, ...services],
 })
 export class PaymentModule {}

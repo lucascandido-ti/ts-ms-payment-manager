@@ -1,3 +1,3 @@
 export class GetPaymentByOrderQuery {
-  constructor(public readonly orderId: number) {}
+  constructor(public readonly orderId: string) {}
 }

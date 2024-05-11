@@ -1,1 +1,1 @@
-export * from './database.providers';
+export * from './prisma.providers';
