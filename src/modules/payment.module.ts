@@ -6,13 +6,17 @@ import { PAYMENT_REPOSITORY, PrismaService } from '@/config';
 import { PaymentRepository } from '@/adapters/data';
 import { PaymentController } from '@/consumers/controllers';
 
-import { CreatePaymentCommandHandler } from '@/core/application/payment/commands';
+import {
+  CreatePaymentCommandHandler,
+  ProcessPaymentCommandHandler,
+} from '@/core/application/payment/commands';
 import { GetPaymentByOrderQueryHandler } from '@/core/application/payment/queries';
 
 const httpControllers = [PaymentController];
 const handlers: Provider[] = [
   GetPaymentByOrderQueryHandler,
   CreatePaymentCommandHandler,
+  ProcessPaymentCommandHandler,
 ];
 const services: Provider[] = [PrismaService];
 const repositories: Provider[] = [

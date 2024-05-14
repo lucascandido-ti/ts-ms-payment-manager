@@ -1,6 +1,8 @@
-import { CreatePaymentCommand } from '@/core/application/payment/commands';
+import {
+  CreatePaymentCommand,
+  ProcessPaymentCommand,
+} from '@/core/application/payment/commands';
 import { GetPaymentByOrderQuery } from '@/core/application/payment/queries';
-import { PaymentResponse } from '@/core/application/payment/responses';
 import { Order } from '@/core/domain/order/entity';
 import { IPayment } from '@/core/domain/payment/interfaces';
 import {
@@ -30,10 +32,17 @@ export class PaymentController {
   async getOrderEvent(@Payload() data: { Order: Order }): Promise<void> {
     const { Order } = data;
 
-    const response = (await this.commandBus.execute(
+    const response = await this.commandBus.execute(
       new CreatePaymentCommand({ order: Order }),
-    )) as PaymentResponse;
+    );
 
     this.logger.debug(`getOrderEvent - result: `, JSON.stringify(response));
+
+    if (response.Success)
+      await this.commandBus.execute(
+        new ProcessPaymentCommand({ payment: response.Data }),
+      );
+    // TODO - Se resposta for sucesso emitir um novo comando para processamento do pagamento
+    // E ao emitir um comando de pagamento
   }
 }

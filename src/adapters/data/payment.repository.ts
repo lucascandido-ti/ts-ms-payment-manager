@@ -10,6 +10,7 @@ import {
   PaymentMethodIdx,
 } from '@/core/domain/payment/enums';
 import { IPaymentRepository } from '@/core/domain/payment/ports';
+import { PaymentDto } from '@/core/application/payment/dto';
 
 @Injectable()
 export class PaymentRepository implements IPaymentRepository {
@@ -17,8 +18,24 @@ export class PaymentRepository implements IPaymentRepository {
 
   constructor(private readonly prisma: PrismaService) {}
 
-  ProcessPayment(_: Payment): Promise<Payment> {
-    throw new Error('Method not implemented.');
+  async ProcessPayment(dto: PaymentDto): Promise<Payment> {
+    const payment = await this.prisma.payment.findUnique({
+      where: { id: dto.id },
+    });
+    payment.paymentStatus = PaymentStatus.CONCLUDED;
+    payment.updatedAt = new Date();
+
+    const { id, ...paymentData } = payment;
+    const result = await this.prisma.payment.update({
+      data: {
+        ...paymentData,
+      },
+      where: { id: id },
+    });
+
+    this.logger.debug(`ProcessPayment: result: `, result);
+
+    return result;
   }
 
   async CreatePayment(order: Order): Promise<Payment> {
