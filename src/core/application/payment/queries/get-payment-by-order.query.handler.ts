@@ -2,7 +2,7 @@ import { Inject } from '@nestjs/common';
 import { CommandHandler, ICommandHandler } from '@nestjs/cqrs';
 
 import { PAYMENT_REPOSITORY } from '@/config';
-import { IPaymentRepository } from '@/core/domain/ports';
+import { IPaymentRepository } from '@/core/domain/payment/ports';
 
 import { GetPaymentByOrderQuery } from './get-payment-by-order.query';
 

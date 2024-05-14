@@ -1,3 +1,7 @@
+export enum PaymentMethodIdx {
+  QRCode,
+}
+
 export enum PaymentMethod {
   QRCode = 'QRCode',
 }

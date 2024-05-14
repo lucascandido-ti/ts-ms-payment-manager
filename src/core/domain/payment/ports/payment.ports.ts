@@ -1,7 +1,8 @@
+import { Order } from '@/core/domain/order';
 import { Payment } from '@prisma/client';
-import { IPayment } from '../interfaces';
 
 export interface IPaymentRepository {
   GetByOrder(orderId: string): Promise<Payment>;
-  GetByCustomer(customerId: number): Promise<IPayment>;
+  CreatePayment(order: Order): Promise<Payment>;
+  ProcessPayment(payment: Payment): Promise<Payment>;
 }
