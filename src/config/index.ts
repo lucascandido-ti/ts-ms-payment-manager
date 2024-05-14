@@ -12,6 +12,7 @@ import { getConfigModuleOptions } from './utils';
 import defaultSettingsJson from './settings.json';
 
 export * from './api.config';
+export * from './rabbitmq.config';
 
 export * from './utils';
 export * from './providers';

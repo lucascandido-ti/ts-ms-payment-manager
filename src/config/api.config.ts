@@ -3,14 +3,10 @@ import {
   CacheModuleOptions,
 } from '@nestjs/cache-manager';
 import { ConfigModule, ConfigService } from '@nestjs/config';
-import {
-  ClientProviderOptions,
-  ClientsProviderAsyncOptions,
-} from '@nestjs/microservices';
+
 import { ThrottlerAsyncOptions } from '@nestjs/throttler';
 
 import {
-  IsArray,
   IsInstance,
   IsNotEmpty,
   IsNumber,
@@ -19,6 +15,7 @@ import {
   IsString,
   ValidateNested,
 } from 'class-validator';
+import { RabbitMQConfig } from './rabbitmq.config';
 
 export class ApiCacheConfig implements CacheModuleOptions {
   @IsNumber()
@@ -50,35 +47,11 @@ export class ApiThrottlerConfig {
   ttl: number;
 }
 
-class NatsOptionConfig {
-  @IsArray()
-  @IsNotEmpty()
-  servers: string[];
-}
-
-export class NatsConfig {
-  @IsString()
-  @IsNotEmpty()
-  name: string;
-
-  @IsInstance(NatsOptionConfig)
-  @ValidateNested()
-  options: NatsOptionConfig;
-}
-
 export const throttlerModuleOptions: ThrottlerAsyncOptions = {
   imports: [ConfigModule],
   inject: [ConfigService],
   useFactory: (configService: ConfigService) =>
     configService.get('api.throttler')!,
-};
-
-export const natsModuleOptions: ClientsProviderAsyncOptions = {
-  name: 'NATS_SERVICE',
-  imports: [ConfigModule],
-  inject: [ConfigService],
-  useFactory: (configService: ConfigService) =>
-    configService.get<ClientProviderOptions>('api.nats')!,
 };
 
 export class ApiConfig {
@@ -98,7 +71,7 @@ export class ApiConfig {
   @ValidateNested()
   throttler: ApiThrottlerConfig;
 
-  @IsInstance(NatsConfig)
+  @IsInstance(RabbitMQConfig)
   @ValidateNested()
-  nats: NatsConfig;
+  rabbitmq: RabbitMQConfig;
 }
