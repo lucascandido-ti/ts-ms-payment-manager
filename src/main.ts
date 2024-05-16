@@ -5,6 +5,19 @@ import { NestExpressApplication } from '@nestjs/platform-express';
 import { ConfigService } from '@nestjs/config';
 import { Config } from './config';
 
+interface IQueueOptions {
+  urls: string[];
+  queue: string;
+  queueOptions: {
+    durable: boolean;
+  };
+}
+
+interface IQueueInfo {
+  transport: Transport;
+  options: IQueueOptions;
+}
+
 async function bootstrap() {
   const app = await NestFactory.create<NestExpressApplication>(AppModule);
 
@@ -12,17 +25,25 @@ async function bootstrap() {
   const config = (configService as unknown as { internalConfig: Config })
     .internalConfig;
 
-  await app.connectMicroservice({
+  const queues = ['order-service-queue', 'payment-service-queue'];
+
+  const infoQueue: IQueueInfo = {
     transport: Transport.RMQ,
     options: {
       urls: ['amqp://guest:guest@localhost:5672'],
-      queue: 'order-service-queue',
       queueOptions: {
-        durable: false,
+        durable: true,
       },
     },
-  });
+  } as IQueueInfo;
 
+  for await (const queue of queues) {
+    infoQueue.options.queue = queue;
+    await app.connectMicroservice(infoQueue);
+  }
+
+  app.setGlobalPrefix(config.api.prefix);
+  
   await app.startAllMicroservices();
   await app.listen(+config.api.port);
 }

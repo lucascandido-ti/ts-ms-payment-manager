@@ -22,6 +22,7 @@
     "schema:push": "prisma db push --schema=./prisma/schema.prisma"
   },
   "dependencies": {
+    "@golevelup/nestjs-rabbitmq": "^5.3.0",
     "@nestjs/cache-manager": "^2.2.2",
     "@nestjs/common": "^10.3.8",
     "@nestjs/config": "^3.2.2",
@@ -51,7 +52,7 @@
     "@types/express": "^4.17.17",
     "@types/jest": "^29.5.2",
     "@types/lodash": "^4.17.1",
-    "@types/node": "^20.3.1",
+    "@types/node": "^20.12.12",
     "@types/supertest": "^2.0.12",
     "@typescript-eslint/eslint-plugin": "^7.8.0",
     "@typescript-eslint/parser": "^7.8.0",

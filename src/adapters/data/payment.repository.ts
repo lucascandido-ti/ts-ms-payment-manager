@@ -1,7 +1,7 @@
 import { Payment } from '@prisma/client';
-import { Injectable, Logger } from '@nestjs/common';
+import { Inject, Injectable, Logger } from '@nestjs/common';
 
-import { PrismaService } from '@/config';
+import { PrismaService, QUEUE_REPOSITORY } from '@/config';
 
 import { Order } from '@/core/domain/order/entity';
 import {
@@ -11,12 +11,17 @@ import {
 } from '@/core/domain/payment/enums';
 import { IPaymentRepository } from '@/core/domain/payment/ports';
 import { PaymentDto } from '@/core/application/payment/dto';
+import { IQueueRepository } from '@/core/domain/queue';
 
 @Injectable()
 export class PaymentRepository implements IPaymentRepository {
   private readonly logger = new Logger(PaymentRepository.name);
 
-  constructor(private readonly prisma: PrismaService) {}
+  constructor(
+    private readonly prisma: PrismaService,
+    @Inject(QUEUE_REPOSITORY)
+    private readonly queueRepository: IQueueRepository,
+  ) {}
 
   async ProcessPayment(dto: PaymentDto): Promise<Payment> {
     const payment = await this.prisma.payment.findUnique({
@@ -34,6 +39,8 @@ export class PaymentRepository implements IPaymentRepository {
     });
 
     this.logger.debug(`ProcessPayment: result: `, result);
+
+    this.queueRepository.publish(result, 'processed-payment');
 
     return result;
   }

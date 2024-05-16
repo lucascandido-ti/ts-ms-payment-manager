@@ -4,9 +4,10 @@ import {
   ClientsProviderAsyncOptions,
 } from '@nestjs/microservices';
 import { IsNotEmpty, IsString } from 'class-validator';
+import { PAYMENT_SERVICE } from './dependecy-injection';
 
 export const rabbitmqModuleOptions: ClientsProviderAsyncOptions = {
-  name: 'ORDER_SERVICE',
+  name: PAYMENT_SERVICE,
   imports: [ConfigModule],
   inject: [ConfigService],
   useFactory: (configService: ConfigService) =>
@@ -17,16 +18,22 @@ export class QueueOptions {
   durable: boolean;
 }
 
+export class ExchangeOptions {
+  name: string;
+  type: string;
+  echangeOpts: QueueOptions;
+}
+
 export class RabbitMQOptions {
   urls: string[];
   queue: string;
   queueOptions: QueueOptions;
+  exchange: ExchangeOptions;
 }
 
 export class RabbitMQConfig {
   @IsString()
   @IsNotEmpty()
   name: string;
-
   options: RabbitMQOptions;
 }
