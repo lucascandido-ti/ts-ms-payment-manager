@@ -7,7 +7,6 @@ import {
   PAYMENT_SERVICE,
   PrismaService,
   QUEUE_REPOSITORY,
-  rabbitmqModuleOptions,
 } from '@/config';
 
 import { PaymentRepository } from '@/adapters/data';
@@ -20,7 +19,6 @@ import {
   ProcessPaymentCommandHandler,
 } from '@/core/application/payment/commands';
 import { GetPaymentByOrderQueryHandler } from '@/core/application/payment/queries';
-import { RabbitMQModule } from '@golevelup/nestjs-rabbitmq';
 
 const httpControllers = [PaymentController];
 const handlers: Provider[] = [
@@ -41,13 +39,13 @@ const repositories: Provider[] = [
         name: PAYMENT_SERVICE,
         transport: Transport.RMQ,
         options: {
-          urls: ["amqp://guest:guest@localhost:5672"],
-          queue: "payment-service-queue",
+          urls: ['amqp://guest:guest@localhost:5672'],
+          queue: 'payment-service-queue',
           queueOptions: {
-            durable: true
-          }
-        }
-      }
+            durable: true,
+          },
+        },
+      },
     ]),
     CqrsModule,
   ],
