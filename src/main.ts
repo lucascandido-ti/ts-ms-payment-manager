@@ -25,7 +25,7 @@ async function bootstrap() {
   const config = (configService as unknown as { internalConfig: Config })
     .internalConfig;
 
-  const queues = ['order-service-queue', 'payment-service-queue'];
+  const queues = ['order-service-queue', 'production-service-queue'];
 
   const infoQueue: IQueueInfo = {
     transport: Transport.RMQ,
@@ -42,9 +42,10 @@ async function bootstrap() {
     await app.connectMicroservice(infoQueue);
   }
 
-  app.setGlobalPrefix(config.api.prefix);
-  
   await app.startAllMicroservices();
+
+  app.setGlobalPrefix(config.api.prefix);
+
   await app.listen(+config.api.port);
 }
 bootstrap();

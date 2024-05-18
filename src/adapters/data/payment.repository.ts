@@ -65,6 +65,8 @@ export class PaymentRepository implements IPaymentRepository {
   }
 
   async GetByOrder(orderId: string): Promise<Payment> {
-    return this.prisma.payment.findUnique({ where: { id: orderId } });
+    return this.prisma.payment.findFirst({
+      where: { orderId: Number(orderId) },
+    });
   }
 }
