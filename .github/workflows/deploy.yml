@@ -1,4 +1,4 @@
-name: Tech Challenge - Payment Manager - CI
+name: Tech Challenge - Payment Manager - Deploy
 
 on:
   push:
