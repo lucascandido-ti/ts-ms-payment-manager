@@ -1,4 +1,4 @@
-name: Tech Challenge - Order Manager - CI
+name: Tech Challenge - Payment Manager - CI
 
 on:
   push:

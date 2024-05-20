@@ -1,0 +1,30 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: api-payment-settings
+data:
+  settings.json: |
+    {
+      "api": {
+        "port": "4000",
+        "prefix": "api",
+        "cache": {
+          "max": 1000,
+          "ttl": 60
+        },
+        "throttler": {
+          "limit": 1000,
+          "ttl": 60
+        },
+        "rabbitmq":{
+          "name": "PAYMENT_SERVICE",
+          "options": {
+            "urls": ["amqp://guest:guest@svc-rmq-queue:5672"],
+            "queue": "payment-service-queue",
+            "queueOptions": {
+              "durable": true
+            }
+          }
+        }
+      }
+    }
