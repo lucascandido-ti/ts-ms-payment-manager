@@ -1,0 +1,29 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: ts-ms-paymentmanager-deployment
+spec:
+  template:
+    metadata:
+      name: ts-ms-paymentmanager-deployment
+      labels:
+        app: ts-ms-paymentmanager-deployment
+    spec:
+      containers:
+        - name: ts-ms-paymentmanager-deployment
+          image: lucascandido/ts-ms-paymentmanager:v4
+          ports:
+            - containerPort: 4000
+          env:
+            - name: MY_SETTINGS
+              valueFrom:
+                configMapKeyRef:
+                  name: api-payment-settings
+                  key: settings.json
+          resources:
+            limits:
+              memory: 512Mi
+  replicas: 1
+  selector:
+    matchLabels:
+      app: ts-ms-paymentmanager-deployment
