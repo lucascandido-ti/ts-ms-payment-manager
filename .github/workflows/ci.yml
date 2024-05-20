@@ -6,7 +6,8 @@ on:
     types: [opened, synchronize, reopened]
 
 jobs:
-  build:
+  setup:
+    name: Build and Test
     runs-on: ubuntu-latest
 
     steps:
@@ -48,38 +49,11 @@ jobs:
       - name: Build project
         run: yarn build
 
-      - name: Upload build artifact
-        uses: actions/upload-artifact@v2
-        with:
-          name: build-artifact
-          path: ./*
-
-  test:
-    needs: build
-    runs-on: ubuntu-latest
-
-    steps:
-      - name: Checkout Repository
-        uses: actions/checkout@v4
-        with:
-          fetch-depth: 0
-
-      - name: Set up Node.js
-        uses: actions/setup-node@v4
-        with:
-          node-version: '20'
-
-      - name: Download build artifact
-        uses: actions/download-artifact@v2
-        with:
-          name: build-artifact
-          path: ./*
-
       - name: Test application
         run: yarn test:e2e
 
   sonarcloud:
-    needs: test
+    needs: setup
     name: SonarCloud
     runs-on: ubuntu-latest
     steps:
